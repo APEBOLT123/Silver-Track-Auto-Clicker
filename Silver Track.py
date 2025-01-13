@@ -71,14 +71,12 @@ def select_button():
     elif check_middle.get():
         current_button = Button.middle
 
-# Initialize mouse and listener
 mouse = Controller()
 click_interval = 1.0
 auto_clicker_running = False
 gui_is_focused = True
 current_button = Button.left
 
-# Create GUI
 def create_gui():
     global entry_interval, btn_start, btn_stop, hotkey, check_left, check_right, check_middle
 
