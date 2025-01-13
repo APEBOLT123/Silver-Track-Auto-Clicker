@@ -17,7 +17,7 @@
  And your done!
  
 
-# How it works,
+# How it works
 
  1. Download the Release Zip
 
