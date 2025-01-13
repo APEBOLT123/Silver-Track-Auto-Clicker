@@ -19,10 +19,11 @@
 
 # How it works,
 
- 1. Install The Python Script (Silver Track.py)
+ 1. Download the Release Zip
 
- 2. Install the runner batch file (runner.bat)
+ 2. Extract the Folder
 
- 3. Ensure both files are in the same directory, it wont work otherwise.
+ 3. In the extracted folder , double click runner.bat and run Silver Track!
 
- 4. Open runner.bat and your done! :)
+ 4. Enjoy!
+
