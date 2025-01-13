@@ -12,7 +12,7 @@
 
  Run this command in, terminal/command prompt to get it all installed!
 
- # pip install pynput pyfiglet
+ pip install pynput pyfiglet
 
  
 
