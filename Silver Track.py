@@ -9,7 +9,7 @@ import sys
 
 def display_ascii_banner():
     ascii_art = pyfiglet.figlet_format("Silver Track")
-    print(f"\033[92m{ascii_art}\033[0m")  # Green text
+    print(f"\033[92m{ascii_art}\033[0m") 
 
 def auto_clicker():
     while auto_clicker_running:
@@ -20,7 +20,7 @@ def auto_clicker():
 def start_auto_clicker():
     global auto_clicker_running, click_interval, auto_clicker_thread, current_button
     try:
-        click_interval = float(entry_interval.get())  # Use seconds
+        click_interval = float(entry_interval.get())
         if click_interval <= 0:
             raise ValueError("Interval must be positive.")
     except ValueError:
@@ -118,14 +118,12 @@ def create_gui():
     checkbox_middle = tk.Checkbutton(root, text="Middle Click", variable=check_middle, fg="green", bg="#2e2e2e", font=("Arial", 12), command=select_button)
     checkbox_middle.pack(anchor="w", padx=10)
 
-    # Buttons for start and stop
     btn_start = tk.Button(root, text="Start", command=start_auto_clicker, fg="white", bg="#2e8b57", font=("Arial", 14))
     btn_start.pack(pady=15)
 
     btn_stop = tk.Button(root, text="Stop", command=stop_auto_clicker, fg="white", bg="#2e2e2e", state=tk.DISABLED, font=("Arial", 14))
     btn_stop.pack(pady=5)
 
-    # Set the protocol for closing the window
     def on_close():
         messagebox.showinfo("Closing Silver Track", "Closing Silver Track")
         stop_auto_clicker()
@@ -133,14 +131,12 @@ def create_gui():
 
     root.protocol("WM_DELETE_WINDOW", on_close)
 
-    # Start the keyboard listener for hotkey
     listener = keyboard.Listener(on_press=on_key_press)
     listener.daemon = True
     listener.start()
 
     root.mainloop()
 
-# Main Program
 if __name__ == "__main__":
     print("\033[92mStarting Silver Track...\033[0m")
     display_ascii_banner()
