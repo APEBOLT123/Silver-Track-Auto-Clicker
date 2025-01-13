@@ -14,11 +14,12 @@
 
  pip install pynput pyfiglet
 
+ And your done!
  
 
 # How it works,
 
- 1. Install The Python Script ( Silver Track.py)
+ 1. Install The Python Script (Silver Track.py)
 
  2. Install the runner batch file (runner.bat)
 
