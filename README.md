@@ -4,20 +4,14 @@
 
  Python, ( Download it here, https://www.python.org/downloads/ if not installed!)
 
- Once python is installed, install the following dependencies,
+ Once python is installed, 
 
- pynput (For controlling the mouse and keyboard)
-
- pyfiglet (for generating the ASCII Banner)
-
- Run this command in, terminal/command prompt to get it all installed!
-
- pip install pynput pyfiglet
+ Run, install_dependencies.bat
 
  And your done!
  
 
-# How it works
+ # How it works
 
  1. Download the Latest Release
 
