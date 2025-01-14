@@ -19,7 +19,7 @@
 
 # How it works
 
- 1. Download the Release Zip
+ 1. Download the Latest Release
 
  2. Extract the Folder
 
