@@ -8,7 +8,7 @@ import json
 import os
 import pyfiglet
 import sys
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk  # For handling non-.ico icons
 
 def display_ascii_banner():
     ascii_art = pyfiglet.figlet_format("Silver Track")
@@ -155,11 +155,13 @@ def create_gui():
     click_type.trace_add("write", lambda *args: select_button())
 
     checkbox_left = tk.Radiobutton(root, text="Left Click", variable=click_type, value="left", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_left.pack(anchor="w", padx=20)
+    checkbox_left.pack(anchor="center", pady=2)  # Centering the radio button
+
     checkbox_right = tk.Radiobutton(root, text="Right Click", variable=click_type, value="right", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_right.pack(anchor="w", padx=20)
+    checkbox_right.pack(anchor="center", pady=2)  # Centering the radio button
+
     checkbox_middle = tk.Radiobutton(root, text="Middle Click", variable=click_type, value="middle", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_middle.pack(anchor="w", padx=20)
+    checkbox_middle.pack(anchor="center", pady=2)  # Centering the radio button
 
     btn_start = tk.Button(root, text="Start", command=start_auto_clicker, fg="white", bg="#4CAF50", font=("Segoe UI", 11), relief="flat", width=12, height=1)
     btn_start.pack(pady=10)
