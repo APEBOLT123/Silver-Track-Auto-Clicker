@@ -6,35 +6,28 @@ import threading
 import time
 import json
 import os
-from PIL import Image, ImageTk
+import pyfiglet
+import sys
+from PIL import Image, ImageTk  # For handling non-.ico icons
+
+def display_ascii_banner():
+    ascii_art = pyfiglet.figlet_format("Silver Track")
+    print(f"\033[92m{ascii_art}\033[0m")
 
 def auto_clicker():
-    global current_button, click_repeats
     while auto_clicker_running:
-        if unlimited_clicks.get():
+        if not gui_is_focused:
             mouse.click(current_button, 1)
-            time.sleep(click_interval)
-        elif click_repeats > 0:
-            mouse.click(current_button, 1)
-            click_repeats -= 1
-            time.sleep(click_interval)
-            if click_repeats <= 0:
-                stop_auto_clicker()
-                break
-        else:
-            time.sleep(click_interval)
+        time.sleep(click_interval)
 
 def start_auto_clicker():
-    global auto_clicker_running, click_interval, auto_clicker_thread, click_repeats
+    global auto_clicker_running, click_interval, auto_clicker_thread, current_button
     try:
         click_interval = float(entry_interval.get())
         if click_interval <= 0:
-            raise ValueError
-        click_repeats = int(entry_repeats.get())
-        if click_repeats <= 0:
-            click_repeats = 1
+            raise ValueError("Interval must be positive.")
     except ValueError:
-        messagebox.showerror("Invalid Input", "Please enter valid numbers for the interval and repeats.")
+        messagebox.showerror("Invalid Input", "Please enter a valid positive number for the interval (in seconds).")
         return
 
     auto_clicker_running = True
@@ -84,9 +77,7 @@ def save_config():
     config_data = {
         "interval": entry_interval.get(),
         "hotkey": hotkey.get(),
-        "click_type": click_type.get(),
-        "repeats": entry_repeats.get(),
-        "unlimited_clicks": unlimited_clicks.get()
+        "click_type": click_type.get()
     }
 
     if not os.path.exists("cfgs"):
@@ -109,9 +100,7 @@ def load_config():
         hotkey.delete(0, tk.END)
         hotkey.insert(0, config_data.get("hotkey", "q"))
         click_type.set(config_data.get("click_type", "left"))
-        entry_repeats.delete(0, tk.END)
-        entry_repeats.insert(0, config_data.get("repeats", "1"))
-        unlimited_clicks.set(config_data.get("unlimited_clicks", False))
+
         select_button()
         messagebox.showinfo("Load Configuration", "Configuration loaded successfully!")
 
@@ -120,25 +109,27 @@ click_interval = 1.0
 auto_clicker_running = False
 gui_is_focused = True
 current_button = Button.left
-click_repeats = 1
 
 def create_gui():
-    global entry_interval, entry_repeats, btn_start, btn_stop, hotkey, click_type, unlimited_clicks
+    global entry_interval, btn_start, btn_stop, hotkey, click_type
 
     root = tk.Tk()
     root.title("Silver Track")
-    root.geometry("600x650")
+    root.geometry("600x500")
     root.config(bg="#222222")
 
+    # Set the icon
     icon_path = os.path.join("icon", "icon.ico")
     if os.path.exists(icon_path):
-        root.iconbitmap(icon_path)
+        root.iconbitmap(icon_path)  # For .ico files
     else:
         png_icon_path = os.path.join("icon", "icon.png")
         if os.path.exists(png_icon_path):
             img = Image.open(png_icon_path)
             tk_img = ImageTk.PhotoImage(img)
             root.tk.call('wm', 'iconphoto', root._w, tk_img)
+        else:
+            print("Icon file not found, using default icon.")
 
     root.bind("<FocusIn>", on_focus_in)
     root.bind("<FocusOut>", on_focus_out)
@@ -150,16 +141,6 @@ def create_gui():
     label_interval.pack(pady=5)
     entry_interval = tk.Entry(root, font=("Segoe UI", 11), bd=2, relief="solid", highlightthickness=1, highlightcolor="#4CAF50", bg="#333333", fg="white", width=15)
     entry_interval.pack(pady=5)
-
-    label_repeats = tk.Label(root, text="Click Repeats (per activation):", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11))
-    label_repeats.pack(pady=5)
-    entry_repeats = tk.Entry(root, font=("Segoe UI", 11), bd=2, relief="solid", highlightthickness=1, highlightcolor="#4CAF50", bg="#333333", fg="white", width=15)
-    entry_repeats.insert(0, "1")
-    entry_repeats.pack(pady=5)
-
-    unlimited_clicks = tk.BooleanVar(value=False)
-    chk_unlimited = tk.Checkbutton(root, text="Unlimited Clicks", variable=unlimited_clicks, fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#333333")
-    chk_unlimited.pack(pady=5)
 
     label_hotkey = tk.Label(root, text="Hotkey to Toggle:", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11))
     label_hotkey.pack(pady=5)
@@ -174,13 +155,13 @@ def create_gui():
     click_type.trace_add("write", lambda *args: select_button())
 
     checkbox_left = tk.Radiobutton(root, text="Left Click", variable=click_type, value="left", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_left.pack(anchor="center", pady=2)
+    checkbox_left.pack(anchor="center", pady=2)  # Centering the radio button
 
     checkbox_right = tk.Radiobutton(root, text="Right Click", variable=click_type, value="right", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_right.pack(anchor="center", pady=2)
+    checkbox_right.pack(anchor="center", pady=2)  # Centering the radio button
 
     checkbox_middle = tk.Radiobutton(root, text="Middle Click", variable=click_type, value="middle", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_middle.pack(anchor="center", pady=2)
+    checkbox_middle.pack(anchor="center", pady=2)  # Centering the radio button
 
     btn_start = tk.Button(root, text="Start", command=start_auto_clicker, fg="white", bg="#4CAF50", font=("Segoe UI", 11), relief="flat", width=12, height=1)
     btn_start.pack(pady=10)
@@ -209,4 +190,13 @@ def create_gui():
 
     root.mainloop()
 
-create_gui()
+if __name__ == "__main__":
+    print("\033[92mStarting Silver Track...\033[0m")
+    display_ascii_banner()
+
+    print("\033[92mStarting GUI...\033[0m")
+
+    create_gui()
+
+    print("\033[92mExiting Silver Track.\033[0m")
+    sys.exit()
