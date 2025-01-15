@@ -8,8 +8,7 @@ import json
 import os
 import pyfiglet
 import sys
-from PIL import Image, ImageTk  # For handling non-.ico icons
-
+from PIL import Image, ImageTk 
 def display_ascii_banner():
     ascii_art = pyfiglet.figlet_format("Silver Track")
     print(f"\033[92m{ascii_art}\033[0m")
