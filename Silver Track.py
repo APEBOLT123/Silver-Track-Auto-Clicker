@@ -8,7 +8,7 @@ import json
 import os
 import pyfiglet
 import sys
-
+from PIL import Image, ImageTk  # For handling non-.ico icons
 
 def display_ascii_banner():
     ascii_art = pyfiglet.figlet_format("Silver Track")
@@ -117,6 +117,19 @@ def create_gui():
     root.title("Silver Track")
     root.geometry("600x500")
     root.config(bg="#222222")
+
+    # Set the icon
+    icon_path = os.path.join("icon", "icon.ico")
+    if os.path.exists(icon_path):
+        root.iconbitmap(icon_path)  # For .ico files
+    else:
+        png_icon_path = os.path.join("icon", "icon.png")
+        if os.path.exists(png_icon_path):
+            img = Image.open(png_icon_path)
+            tk_img = ImageTk.PhotoImage(img)
+            root.tk.call('wm', 'iconphoto', root._w, tk_img)
+        else:
+            print("Icon file not found, using default icon.")
 
     root.bind("<FocusIn>", on_focus_in)
     root.bind("<FocusOut>", on_focus_out)
