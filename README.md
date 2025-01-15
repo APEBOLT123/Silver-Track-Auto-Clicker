@@ -21,3 +21,6 @@
 
  4. Enjoy!
 
+# I Update this software often and would love some feedback/ideas!
+
+I already have alot of things in mind, just a matter of doing it.
