@@ -23,20 +23,11 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-REM Force reinstall pynput
-echo Installing pynput...
-pip install --force-reinstall pynput
+REM Install required dependencies
+echo Installing required dependencies...
+pip install --force-reinstall pynput pyfiglet pillow
 if %errorlevel% neq 0 (
-    echo Failed to install pynput. Please check your internet connection.
-    pause
-    exit /b
-)
-
-REM Force reinstall pyfiglet
-echo Installing pyfiglet...
-pip install --force-reinstall pyfiglet
-if %errorlevel% neq 0 (
-    echo Failed to install pyfiglet. Please check your internet connection.
+    echo Failed to install dependencies. Please check your internet connection.
     pause
     exit /b
 )

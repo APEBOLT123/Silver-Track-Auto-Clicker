@@ -8,7 +8,7 @@ import json
 import os
 import pyfiglet
 import sys
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk
 
 def display_ascii_banner():
     ascii_art = pyfiglet.figlet_format("Silver Track")
