@@ -24,3 +24,5 @@
 # I Update this software often and would love some feedback/ideas!
 
 I already have alot of things in mind, just a matter of doing it.
+
+(Update, Still Working On This Just Hard Working On One Thing LOL.)
