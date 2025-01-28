@@ -15,19 +15,37 @@ def display_ascii_banner():
     print(f"\033[92m{ascii_art}\033[0m")
 
 def auto_clicker():
+    global click_repeats
+    clicks_done = 0
     while auto_clicker_running:
         if not gui_is_focused:
             mouse.click(current_button, 1)
+            clicks_done += 1
+            if click_repeats != -1 and clicks_done >= click_repeats:
+                stop_auto_clicker()
+                break
         time.sleep(click_interval)
 
 def start_auto_clicker():
-    global auto_clicker_running, click_interval, auto_clicker_thread, current_button
+    global auto_clicker_running, click_interval, auto_clicker_thread, current_button, click_repeats
     try:
         click_interval = float(entry_interval.get())
         if click_interval <= 0:
             raise ValueError("Interval must be positive.")
     except ValueError:
         messagebox.showerror("Invalid Input", "Please enter a valid positive number for the interval (in seconds).")
+        return
+
+    try:
+        repeat_value = entry_repeats.get().strip().lower()
+        if repeat_value == "unlimited":
+            click_repeats = -1  # Unlimited clicks
+        else:
+            click_repeats = int(repeat_value)
+            if click_repeats <= 0:
+                raise ValueError("Repeats must be a positive integer or 'unlimited'.")
+    except ValueError:
+        messagebox.showerror("Invalid Input", "Please enter a valid positive integer or 'unlimited' for click repeats.")
         return
 
     auto_clicker_running = True
@@ -77,7 +95,8 @@ def save_config():
     config_data = {
         "interval": entry_interval.get(),
         "hotkey": hotkey.get(),
-        "click_type": click_type.get()
+        "click_type": click_type.get(),
+        "click_repeats": entry_repeats.get()
     }
 
     if not os.path.exists("cfgs"):
@@ -100,22 +119,25 @@ def load_config():
         hotkey.delete(0, tk.END)
         hotkey.insert(0, config_data.get("hotkey", "q"))
         click_type.set(config_data.get("click_type", "left"))
+        entry_repeats.delete(0, tk.END)
+        entry_repeats.insert(0, config_data.get("click_repeats", "unlimited"))
 
         select_button()
         messagebox.showinfo("Load Configuration", "Configuration loaded successfully!")
 
 mouse = Controller()
 click_interval = 1.0
+click_repeats = -1  # -1 means unlimited clicks
 auto_clicker_running = False
 gui_is_focused = True
 current_button = Button.left
 
 def create_gui():
-    global entry_interval, btn_start, btn_stop, hotkey, click_type
+    global entry_interval, btn_start, btn_stop, hotkey, click_type, entry_repeats
 
     root = tk.Tk()
     root.title("Silver Track")
-    root.geometry("600x500")
+    root.geometry("600x600")
     root.config(bg="#222222")
 
     # Set the icon
@@ -142,6 +164,12 @@ def create_gui():
     entry_interval = tk.Entry(root, font=("Segoe UI", 11), bd=2, relief="solid", highlightthickness=1, highlightcolor="#4CAF50", bg="#333333", fg="white", width=15)
     entry_interval.pack(pady=5)
 
+    label_repeats = tk.Label(root, text="Click Repeats (or 'unlimited'):", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11))
+    label_repeats.pack(pady=5)
+    entry_repeats = tk.Entry(root, font=("Segoe UI", 11), bd=2, relief="solid", highlightthickness=1, highlightcolor="#4CAF50", bg="#333333", fg="white", width=15)
+    entry_repeats.insert(0, "unlimited")
+    entry_repeats.pack(pady=5)
+
     label_hotkey = tk.Label(root, text="Hotkey to Toggle:", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11))
     label_hotkey.pack(pady=5)
     hotkey = tk.Entry(root, font=("Segoe UI", 11), bd=2, relief="solid", highlightthickness=1, highlightcolor="#4CAF50", bg="#333333", fg="white", width=15)
@@ -155,13 +183,13 @@ def create_gui():
     click_type.trace_add("write", lambda *args: select_button())
 
     checkbox_left = tk.Radiobutton(root, text="Left Click", variable=click_type, value="left", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_left.pack(anchor="center", pady=2)  
+    checkbox_left.pack(anchor="center", pady=2)  # Centering the radio button
 
     checkbox_right = tk.Radiobutton(root, text="Right Click", variable=click_type, value="right", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_right.pack(anchor="center", pady=2)  
+    checkbox_right.pack(anchor="center", pady=2)  # Centering the radio button
 
     checkbox_middle = tk.Radiobutton(root, text="Middle Click", variable=click_type, value="middle", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_middle.pack(anchor="center", pady=2) 
+    checkbox_middle.pack(anchor="center", pady=2)  # Centering the radio button
 
     btn_start = tk.Button(root, text="Start", command=start_auto_clicker, fg="white", bg="#4CAF50", font=("Segoe UI", 11), relief="flat", width=12, height=1)
     btn_start.pack(pady=10)
