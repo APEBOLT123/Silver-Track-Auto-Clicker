@@ -39,7 +39,7 @@ def start_auto_clicker():
     try:
         repeat_value = entry_repeats.get().strip().lower()
         if repeat_value == "unlimited":
-            click_repeats = -1  # Unlimited clicks
+            click_repeats = -1
         else:
             click_repeats = int(repeat_value)
             if click_repeats <= 0:
@@ -143,7 +143,7 @@ def create_gui():
     # Set the icon
     icon_path = os.path.join("icon", "icon.ico")
     if os.path.exists(icon_path):
-        root.iconbitmap(icon_path)  # For .ico files
+        root.iconbitmap(icon_path)
     else:
         png_icon_path = os.path.join("icon", "icon.png")
         if os.path.exists(png_icon_path):
@@ -183,13 +183,13 @@ def create_gui():
     click_type.trace_add("write", lambda *args: select_button())
 
     checkbox_left = tk.Radiobutton(root, text="Left Click", variable=click_type, value="left", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_left.pack(anchor="center", pady=2)  # Centering the radio button
+    checkbox_left.pack(anchor="center", pady=2) 
 
     checkbox_right = tk.Radiobutton(root, text="Right Click", variable=click_type, value="right", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_right.pack(anchor="center", pady=2)  # Centering the radio button
+    checkbox_right.pack(anchor="center", pady=2)
 
     checkbox_middle = tk.Radiobutton(root, text="Middle Click", variable=click_type, value="middle", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_middle.pack(anchor="center", pady=2)  # Centering the radio button
+    checkbox_middle.pack(anchor="center", pady=2)  
 
     btn_start = tk.Button(root, text="Start", command=start_auto_clicker, fg="white", bg="#4CAF50", font=("Segoe UI", 11), relief="flat", width=12, height=1)
     btn_start.pack(pady=10)
