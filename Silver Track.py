@@ -140,7 +140,6 @@ def create_gui():
     root.geometry("600x600")
     root.config(bg="#222222")
 
-    # Set the icon
     icon_path = os.path.join("icon", "icon.ico")
     if os.path.exists(icon_path):
         root.iconbitmap(icon_path)
@@ -179,17 +178,20 @@ def create_gui():
     label_button = tk.Label(root, text="Select Mouse Button:", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11))
     label_button.pack(pady=5)
 
+    radio_frame = tk.Frame(root, bg="#222222")
+    radio_frame.pack(pady=5)
+
     click_type = tk.StringVar(value="left")
     click_type.trace_add("write", lambda *args: select_button())
 
-    checkbox_left = tk.Radiobutton(root, text="Left Click", variable=click_type, value="left", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_left.pack(anchor="center", pady=2)
+    checkbox_left = tk.Radiobutton(radio_frame, text="Left Click", variable=click_type, value="left", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
+    checkbox_left.grid(row=0, column=0, padx=10, pady=2)
 
-    checkbox_right = tk.Radiobutton(root, text="Right Click", variable=click_type, value="right", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_right.pack(anchor="center", pady=2)
+    checkbox_right = tk.Radiobutton(radio_frame, text="Right Click", variable=click_type, value="right", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
+    checkbox_right.grid(row=0, column=1, padx=10, pady=2)
 
-    checkbox_middle = tk.Radiobutton(root, text="Middle Click", variable=click_type, value="middle", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
-    checkbox_middle.pack(anchor="center", pady=2)
+    checkbox_middle = tk.Radiobutton(radio_frame, text="Middle Click", variable=click_type, value="middle", fg="#a6e0a1", bg="#222222", font=("Segoe UI", 11), selectcolor="#222222")
+    checkbox_middle.grid(row=0, column=2, padx=10, pady=2)
 
     btn_start = tk.Button(root, text="Start", command=start_auto_clicker, fg="white", bg="#4CAF50", font=("Segoe UI", 11), relief="flat", width=12, height=1)
     btn_start.pack(pady=10)
